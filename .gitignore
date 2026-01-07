@@ -1,0 +1,20 @@
+# Build
+bin/
+obj/
+
+# User-specific
+.vs/
+*.user
+*.suo
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Upload klasörü (ileride)
+wwwroot/uploads/
+
+# Environment
+appsettings.Development.json
