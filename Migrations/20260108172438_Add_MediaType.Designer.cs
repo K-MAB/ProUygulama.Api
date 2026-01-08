@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProUygulama.Api.Data;
@@ -11,9 +12,11 @@ using ProUygulama.Api.Data;
 namespace ProUygulama.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260108172438_Add_MediaType")]
+    partial class Add_MediaType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,19 +45,15 @@ namespace ProUygulama.Api.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("PrimaryButtonText")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PrimaryButtonUrl")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SecondaryButtonText")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SecondaryButtonUrl")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Slogan")
@@ -108,8 +107,7 @@ namespace ProUygulama.Api.Migrations
                 {
                     b.HasOne("ProUygulama.Api.Entities.MediaFile", "BackgroundVideo")
                         .WithMany()
-                        .HasForeignKey("BackgroundVideoId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("BackgroundVideoId");
 
                     b.Navigation("BackgroundVideo");
                 });

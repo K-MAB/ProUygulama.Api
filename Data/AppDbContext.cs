@@ -10,5 +10,18 @@ public class AppDbContext : DbContext
     {
     }
 
+    public DbSet<HeaderContent> HeaderContents => Set<HeaderContent>();
     public DbSet<MediaFile> MediaFiles => Set<MediaFile>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Header -> Background Video ilişki
+        modelBuilder.Entity<HeaderContent>()
+            .HasOne(x => x.BackgroundVideo)
+            .WithMany()
+            .HasForeignKey(x => x.BackgroundVideoId)
+            .OnDelete(DeleteBehavior.SetNull);
+    }
 }
