@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProUygulama.Api.Data;
@@ -11,9 +12,11 @@ using ProUygulama.Api.Data;
 namespace ProUygulama.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260109150520_categor2")]
+    partial class categor2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,42 +81,6 @@ namespace ProUygulama.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("ProUygulama.Api.Entities.ContactMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Subject")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ContactMessages");
                 });
 
             modelBuilder.Entity("ProUygulama.Api.Entities.HeaderContent", b =>
@@ -234,87 +201,6 @@ namespace ProUygulama.Api.Migrations
                     b.ToTable("MissionVisions");
                 });
 
-            modelBuilder.Entity("ProUygulama.Api.Entities.Project", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("CoverMediaId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DescriptionHtml")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("District")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CoverMediaId");
-
-                    b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("ProUygulama.Api.Entities.ProjectCategory", b =>
-                {
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ProjectId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("ProjectCategories");
-                });
-
-            modelBuilder.Entity("ProUygulama.Api.Entities.ProjectGalleryItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("MediaFileId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MediaFileId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectGalleryItems");
-                });
-
             modelBuilder.Entity("ProUygulama.Api.Entities.ReferenceItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -408,6 +294,86 @@ namespace ProUygulama.Api.Migrations
                     b.ToTable("ValueItems");
                 });
 
+            modelBuilder.Entity("Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("CoverMediaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DescriptionHtml")
+                        .HasColumnType("text");
+
+                    b.Property<string>("District")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoverMediaId");
+
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("ProjectCategory", b =>
+                {
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ProjectId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("ProjectCategories");
+                });
+
+            modelBuilder.Entity("ProjectGalleryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("MediaFileId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MediaFileId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectGalleryItems");
+                });
+
             modelBuilder.Entity("ProUygulama.Api.Entities.HeaderContent", b =>
                 {
                     b.HasOne("ProUygulama.Api.Entities.MediaFile", "BackgroundVideo")
@@ -416,54 +382,6 @@ namespace ProUygulama.Api.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("BackgroundVideo");
-                });
-
-            modelBuilder.Entity("ProUygulama.Api.Entities.Project", b =>
-                {
-                    b.HasOne("ProUygulama.Api.Entities.MediaFile", "CoverMedia")
-                        .WithMany()
-                        .HasForeignKey("CoverMediaId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("CoverMedia");
-                });
-
-            modelBuilder.Entity("ProUygulama.Api.Entities.ProjectCategory", b =>
-                {
-                    b.HasOne("ProUygulama.Api.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProUygulama.Api.Entities.Project", "Project")
-                        .WithMany("Categories")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("ProUygulama.Api.Entities.ProjectGalleryItem", b =>
-                {
-                    b.HasOne("ProUygulama.Api.Entities.MediaFile", "MediaFile")
-                        .WithMany()
-                        .HasForeignKey("MediaFileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProUygulama.Api.Entities.Project", "Project")
-                        .WithMany("Gallery")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MediaFile");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("ProUygulama.Api.Entities.ReferenceItem", b =>
@@ -476,7 +394,55 @@ namespace ProUygulama.Api.Migrations
                     b.Navigation("LogoMedia");
                 });
 
-            modelBuilder.Entity("ProUygulama.Api.Entities.Project", b =>
+            modelBuilder.Entity("Project", b =>
+                {
+                    b.HasOne("ProUygulama.Api.Entities.MediaFile", "CoverMedia")
+                        .WithMany()
+                        .HasForeignKey("CoverMediaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("CoverMedia");
+                });
+
+            modelBuilder.Entity("ProjectCategory", b =>
+                {
+                    b.HasOne("ProUygulama.Api.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Project", "Project")
+                        .WithMany("Categories")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("ProjectGalleryItem", b =>
+                {
+                    b.HasOne("ProUygulama.Api.Entities.MediaFile", "MediaFile")
+                        .WithMany()
+                        .HasForeignKey("MediaFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Project", "Project")
+                        .WithMany("Gallery")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MediaFile");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Project", b =>
                 {
                     b.Navigation("Categories");
 
