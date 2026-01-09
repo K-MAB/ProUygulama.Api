@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProUygulama.Api.Data;
@@ -11,9 +12,11 @@ using ProUygulama.Api.Data;
 namespace ProUygulama.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260109140456_hizmetler")]
+    partial class hizmetler
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,35 +170,6 @@ namespace ProUygulama.Api.Migrations
                     b.ToTable("MissionVisions");
                 });
 
-            modelBuilder.Entity("ProUygulama.Api.Entities.ReferenceItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid?>("LogoMediaId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LogoMediaId");
-
-                    b.ToTable("ReferenceItems");
-                });
-
             modelBuilder.Entity("ProUygulama.Api.Entities.ServiceItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -268,16 +242,6 @@ namespace ProUygulama.Api.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("BackgroundVideo");
-                });
-
-            modelBuilder.Entity("ProUygulama.Api.Entities.ReferenceItem", b =>
-                {
-                    b.HasOne("ProUygulama.Api.Entities.MediaFile", "LogoMedia")
-                        .WithMany()
-                        .HasForeignKey("LogoMediaId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("LogoMedia");
                 });
 #pragma warning restore 612, 618
         }
