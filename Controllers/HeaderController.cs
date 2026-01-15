@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -48,6 +49,7 @@ public class HeaderController : ControllerBase
     // ======================================================
     // CREATE HEADER (ADMIN)
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<HeaderResponseDto>> Create(
         [FromBody] CreateHeaderDto dto)
@@ -102,6 +104,7 @@ public class HeaderController : ControllerBase
     // ======================================================
     // SET BACKGROUND VIDEO
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpPost("{id:guid}/set-video")]
     public async Task<IActionResult> SetBackgroundVideo(
         Guid id,
@@ -128,6 +131,7 @@ public class HeaderController : ControllerBase
     // ======================================================
     // UPDATE HEADER
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
@@ -151,6 +155,7 @@ public class HeaderController : ControllerBase
 
         return Ok(new { message = "Header güncellendi." });
     }
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -56,6 +57,7 @@ public class ValuesController : ControllerBase
     // CREATE
     // POST: /api/values
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateValueDto dto)
     {
@@ -80,6 +82,7 @@ public class ValuesController : ControllerBase
     // UPDATE
     // PUT: /api/values/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateValueDto dto)
     {
@@ -101,6 +104,7 @@ public class ValuesController : ControllerBase
     // HARD DELETE
     // DELETE: /api/values/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

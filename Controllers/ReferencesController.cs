@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -44,6 +45,7 @@ public class ReferencesController : ControllerBase
     // ADMIN LIST
     // GET: /api/references/admin
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpGet("admin")]
     public async Task<IActionResult> GetAll()
     {
@@ -57,6 +59,7 @@ public class ReferencesController : ControllerBase
     // CREATE
     // POST: /api/references
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateReferenceDto dto)
     {
@@ -80,6 +83,7 @@ public class ReferencesController : ControllerBase
     // UPDATE
     // PUT: /api/references/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateReferenceDto dto)
     {
@@ -100,6 +104,7 @@ public class ReferencesController : ControllerBase
     // HARD DELETE
     // DELETE: /api/references/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

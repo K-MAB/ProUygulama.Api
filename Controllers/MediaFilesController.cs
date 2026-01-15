@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -36,6 +37,7 @@ public class MediaFilesController : ControllerBase
     // ======================================================
     // UPLOAD
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpPost("upload")]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(MAX_VIDEO_SIZE)]
@@ -94,6 +96,7 @@ public class MediaFilesController : ControllerBase
     // ======================================================
     // LIST (ADMIN)
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -107,6 +110,7 @@ public class MediaFilesController : ControllerBase
     // ======================================================
     // DELETE
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

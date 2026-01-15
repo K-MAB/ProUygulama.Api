@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -43,6 +44,7 @@ public class AboutController : ControllerBase
     // CREATE ABOUT (ADMIN)
     // Eski aktifleri otomatik pasif yapar
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<AboutResponseDto>> Create(
         [FromBody] CreateAboutDto dto)
@@ -88,6 +90,7 @@ public class AboutController : ControllerBase
     // ======================================================
     // UPDATE ABOUT (ADMIN)
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
@@ -114,6 +117,7 @@ public class AboutController : ControllerBase
     // ======================================================
     // HARD DELETE ABOUT (ADMIN)
     // ======================================================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

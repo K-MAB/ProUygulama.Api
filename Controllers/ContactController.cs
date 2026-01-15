@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -46,6 +47,7 @@ public class ContactController : ControllerBase
     // ADMIN - LIST
     // GET /api/contact/admin
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpGet("admin")]
     public async Task<IActionResult> GetAll()
     {
@@ -69,6 +71,7 @@ public class ContactController : ControllerBase
     // ADMIN - DETAIL + MARK AS READ
     // GET /api/contact/admin/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpGet("admin/{id:guid}")]
     public async Task<IActionResult> GetDetail(Guid id)
     {
@@ -89,6 +92,7 @@ public class ContactController : ControllerBase
     // ADMIN - HARD DELETE
     // DELETE /api/contact/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

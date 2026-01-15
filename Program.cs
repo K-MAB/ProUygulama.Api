@@ -1,14 +1,17 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http.Features;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
-/* ============================
-   CONTROLLERS & JSON
-============================ */
+// ======================================================
+// CONTROLLERS & JSON
+// ======================================================
 builder.Services
     .AddControllers()
     .AddJsonOptions(options =>
@@ -16,19 +19,17 @@ builder.Services
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
-/* ============================
-   SWAGGER
-============================ */
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+// ======================================================
+// DATABASE
+// ======================================================
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    // IFormFile upload hatasını çözen filter
-    c.OperationFilter<FileUploadOperationFilter>();
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
 });
 
-/* ============================
-   CORS
-============================ */
+// ======================================================
+// CORS
+// ======================================================
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Dev", policy =>
@@ -40,37 +41,87 @@ builder.Services.AddCors(options =>
     });
 });
 
-/* ============================
-   DATABASE
-============================ */
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("Default")
-    );
-});
-
-/* ============================
-   FILE UPLOAD LIMITS
-============================ */
-
-// Multipart (form-data) limiti → 200 MB
-builder.Services.Configure<FormOptions>(options =>
+// ======================================================
+// FILE UPLOAD LIMITS
+// ======================================================
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 200 * 1024 * 1024; // 200 MB
 });
 
-// Kestrel request body limiti → 200 MB
-builder.WebHost.ConfigureKestrel(options =>
+// ======================================================
+// JWT AUTHENTICATION
+// ======================================================
+var jwtKey = builder.Configuration["Jwt:Key"]!;
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
+var jwtAudience = builder.Configuration["Jwt:Audience"]!;
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtKey)
+            ),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+// ======================================================
+// SWAGGER + JWT SUPPORT
+// ======================================================
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
 {
-    options.Limits.MaxRequestBodySize = 200 * 1024 * 1024; // 200 MB
+    c.OperationFilter<FileUploadOperationFilter>();
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header. Example: Bearer {token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 var app = builder.Build();
 
-/* ============================
-   MIDDLEWARE PIPELINE
-============================ */
+// ======================================================
+// MIDDLEWARE PIPELINE
+// ======================================================
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -78,11 +129,13 @@ if (app.Environment.IsDevelopment())
     app.MapGet("/", () => Results.Redirect("/swagger"));
 }
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseCors("Dev");
 
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

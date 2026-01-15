@@ -29,6 +29,7 @@ public class AppDbContext : DbContext
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<ProjectCategory> ProjectCategories => Set<ProjectCategory>();
     public DbSet<ProjectGalleryItem> ProjectGalleryItems => Set<ProjectGalleryItem>();
+    public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,5 +98,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Category>()
             .HasIndex(x => x.Slug)
             .IsUnique();
+      modelBuilder.Entity<AdminUser>()
+            .HasIndex(x => x.Email)
+            .IsUnique();
+
     }
+
 }

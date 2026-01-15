@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -44,6 +45,7 @@ public class CategoriesController : ControllerBase
     // GET: /api/categories/admin
     // ============================
     [HttpGet("admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
     {
         var list = await _db.Categories
@@ -58,6 +60,7 @@ public class CategoriesController : ControllerBase
     // POST: /api/categories
     // ============================
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create(CreateCategoryDto dto)
     {
         var slug = SlugHelper.Generate(dto.Name);
@@ -86,6 +89,7 @@ public class CategoriesController : ControllerBase
     // UPDATE
     // PUT: /api/categories/{id}
     // ============================
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateCategoryDto dto)
     {
@@ -106,6 +110,7 @@ public class CategoriesController : ControllerBase
     // HARD DELETE
     // DELETE: /api/categories/{id}
     // ============================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

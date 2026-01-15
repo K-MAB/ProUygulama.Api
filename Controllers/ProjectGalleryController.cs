@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -21,6 +22,7 @@ public class ProjectGalleryController : ControllerBase
     // ADD IMAGE TO GALLERY
     // POST /api/projects/{projectId}/gallery
     // ============================
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Add(Guid projectId, AddProjectGalleryItemDto dto)
     {
@@ -45,7 +47,7 @@ public class ProjectGalleryController : ControllerBase
 
         return Ok(item);
     }
-
+    [Authorize(Roles = "Admin")]
     // ============================
     // UPDATE ORDER (DRAG & DROP)
     // PUT /api/projects/{projectId}/gallery/order
@@ -74,6 +76,7 @@ public class ProjectGalleryController : ControllerBase
     // DELETE ITEM
     // DELETE /api/projects/{projectId}/gallery/{galleryItemId}
     // ============================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{galleryItemId:guid}")]
     public async Task<IActionResult> Delete(Guid projectId, Guid galleryItemId)
     {

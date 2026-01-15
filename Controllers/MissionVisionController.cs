@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProUygulama.Api.Data;
 using ProUygulama.Api.Dtos;
@@ -45,6 +46,7 @@ public class MissionVisionController : ControllerBase
     // ADMIN LIST
     // GET: /api/mission-vision/admin
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpGet("admin")]
     public async Task<IActionResult> GetAll()
     {
@@ -57,6 +59,7 @@ public class MissionVisionController : ControllerBase
     // CREATE
     // POST: /api/mission-vision
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateMissionVisionDto dto)
     {
@@ -82,6 +85,7 @@ public class MissionVisionController : ControllerBase
     // UPDATE
     // PUT: /api/mission-vision/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateMissionVisionDto dto)
     {
@@ -103,6 +107,7 @@ public class MissionVisionController : ControllerBase
     // HARD DELETE
     // DELETE: /api/mission-vision/{id}
     // =====================================
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
