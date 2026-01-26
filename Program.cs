@@ -28,16 +28,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // ======================================================
-// CORS
+// CORS (FIXED for credentials)
 // ======================================================
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Dev", policy =>
     {
         policy
-            .AllowAnyOrigin()
+            .WithOrigins("http://localhost:3000") // ✅ frontend origin
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials(); // ✅ withCredentials/credentials:include için şart
     });
 });
 
@@ -132,6 +133,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// ✅ CORS, auth'dan önce
 app.UseCors("Dev");
 
 app.UseAuthentication();

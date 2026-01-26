@@ -8,7 +8,6 @@ public class MediaFile
 
     public string ContentType { get; set; } = null!;
 
-    // ✅ EKLENMESİ GEREKEN ALAN
     public long Size { get; set; }
 
     public string Path { get; set; } = null!;
